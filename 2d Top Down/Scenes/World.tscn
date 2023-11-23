@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://dvtjxthq6p1am"]
+[gd_scene load_steps=33 format=3 uid="uid://dvtjxthq6p1am"]
 
 [ext_resource type="Texture2D" uid="uid://nko5d36b3oh7" path="res://Art/Interior.png" id="1_elps6"]
 [ext_resource type="Script" path="res://Scripts/TileMap2.gd" id="2_hfvc0"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://d17xpuwmtxabl" path="res://Art/TilesetHouse.png" id="12_b7jko"]
 [ext_resource type="PackedScene" uid="uid://dqhapenlctqos" path="res://Scenes/Player.tscn" id="13_42t1m"]
 [ext_resource type="PackedScene" uid="uid://b7pams3y22xxl" path="res://Scenes/TreeOne.tscn" id="14_rvyw1"]
+[ext_resource type="Script" path="res://Scripts/Stamina.gd" id="15_uis1d"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_panbb"]
 texture = ExtResource("1_elps6")
@@ -6785,9 +6786,17 @@ position = Vector2(-92, 60)
 z_index = 1
 y_sort_enabled = true
 
+[node name="ProgressBar" type="ProgressBar" parent="Player"]
+offset_left = -69.0
+offset_top = -52.0
+offset_right = 79.0
+offset_bottom = -25.0
+script = ExtResource("15_uis1d")
+
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(6, 6)
 
 [connection signal="body_entered" from="TileMap2/Area2D" to="TileMap2" method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="TileMap2/Area2D2" to="TileMap2" method="_on_area_2d_2_body_entered"]
 [connection signal="body_exited" from="TileMap2/Area2D2" to="TileMap2" method="_on_area_2d_2_body_exited"]
+[connection signal="staminaChange" from="Player" to="Player/ProgressBar" method="_on_player_stamina_change"]

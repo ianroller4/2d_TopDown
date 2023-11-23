@@ -5,6 +5,11 @@ extends CharacterBody2D
 @export var walkSpeed := 50
 @export var sprintSpeed := 100
 
+@export var maxStamina := 100.0
+var stamina := maxStamina
+
+signal staminaChange
+
 @onready var animations = $AnimationPlayer
 
 var speed := 0
@@ -50,16 +55,32 @@ func setWalk():
 
 func setSpeed():
 	if Input.is_action_pressed("ui_space"):
+		
 		speed = crouchSpeed
 		setCrouch()
 	else:
 		if Input.is_action_pressed("ui_shift"):
-			speed = sprintSpeed
-			setSprint()
+			if stamina > 0:
+				speed = sprintSpeed
+				stamina -= 1.0
+				staminaChange.emit()
+				setSprint()
+			else:
+				stamina = 0
+				speed = walkSpeed
+				setWalk()
 		else: 
 			speed = walkSpeed
 			setWalk()
+			if stamina < maxStamina:
+				stamina += 0.5
+				staminaChange.emit()
 			
+func getStamina() -> float:
+	return stamina
+
+func getMaxStamina() -> float:
+	return maxStamina
 
 
 func _physics_process(_delta):
